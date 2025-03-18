@@ -1,14 +1,14 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017')
-    .then(
-        () => {
-            console.log('Base connecte');
-        }
-    )
-    .catch(
-        (error) => {
-            console.log(error);
-        }
-    )
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-module.exports = mongoose;
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB connecté !");
+  } catch (error) {
+    console.error("❌ Erreur de connexion MongoDB :", error);
+    process.exit(1);
+  }
+};
+
+module.exports = connectDB;
