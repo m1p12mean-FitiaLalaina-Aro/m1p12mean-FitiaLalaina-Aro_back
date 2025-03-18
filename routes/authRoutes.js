@@ -21,7 +21,10 @@ router.post("/login", login);
 
 // 🔹 Route protégée 
 router.get("/profile", authMiddleware, async (req, res) => {
-  res.json({ msg: `Bienvenue ${req.user.id}, votre rôle est ${req.user.role}` });
+  res.json({ msg: `Bienvenue ${req.user.name}, votre rôle est ${req.user.role}` });
+});
+router.get("/admin", authMiddleware, adminMiddleware, async (req, res) => {
+    res.json({ msg: "Bienvenue Admin, accès autorisé" });
 });
 
 module.exports = router;
