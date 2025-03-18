@@ -1,2 +1,67 @@
-npm start to serve the project
-creat the database in mongodb and setup the mongodb
+# 📌 Projet Node.js avec Express et MongoDB (Authentification & Gestion des Rôles)
+
+Ce projet est une API REST construite avec **Node.js**, **Express**, et **MongoDB**, permettant la gestion des utilisateurs avec un **système de connexion, d'inscription et de rôles (user/admin)**.
+
+
+## 🛠 Prérequis
+Avant d'installer le projet, assure-toi d'avoir :
+- **Node.js** (20.x) 👉 [Télécharger ici](https://nodejs.org/)
+- **MongoDB** (8.x) 👉 [Télécharger ici](https://www.mongodb.com/try/download/community)
+
+
+## 📥 Installation
+### 1️⃣ Cloner le projet
+```sh
+git clone https://github.com/m1p12mean-FitiaLalaina-Aro/m1p12mean-FitiaLalaina-Aro_back.git
+cd m1p12mean-FitiaLalaina-Aro_back
+```
+
+### 2️⃣ Installer les dépendances
+```sh
+npm install
+```
+
+### 3️⃣ Configurer les variables d'environnement
+Crée un fichier `.env` à la racine du projet et ajoute :
+```
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/mydatabase
+JWT_SECRET=ton_secret_super_secure
+```
+
+📌 **Remplace `mydatabase` par le nom de ta base MongoDB.**
+
+---
+
+## 🚀 Lancer le projet
+### 🔹 Démarrer le serveur
+```sh
+node server.js
+```
+📌 **Ou utilise `nodemon` pour le rechargement automatique :**
+```sh
+npm install -g nodemon
+nodemon server.js
+```
+
+## 📂 Structure du projet
+```
+myapp/
+│── config/
+│   └── connect.js      
+│── controllers/
+│   └── authController.js  
+│── models/
+│   └── User.js    
+│── routes/
+│   └── authRoutes.js  
+│── .env
+│── server.js      
+│── package.json
+│── README.md
+```
+
+
+## 👨‍💻 Auteur
+Projet développé par **[Fitia Lalaina]**,  **[Tsiky Aro]**
+
