@@ -1,6 +1,7 @@
 const express = require("express");
 const { check } = require("express-validator");
 const { register, login } = require("../controllers/authcontroller");
+const { authMiddleware, adminMiddleware } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -17,5 +18,10 @@ router.post(
 
 // 🔹 Route de connexion
 router.post("/login", login);
+
+// 🔹 Route protégée 
+router.get("/profile", authMiddleware, async (req, res) => {
+  res.json({ msg: `Bienvenue ${req.user.id}, votre rôle est ${req.user.role}` });
+});
 
 module.exports = router;
