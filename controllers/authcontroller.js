@@ -17,6 +17,9 @@ exports.register = async (req, res) => {
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: "Utilisateur déjà existant" });
 
+    const rolePermissions = await RolePermission.findOne({ role }).populate("permissions");
+    if (!rolePermissions) return res.status(400).json({ msg: "Rôle invalide" });
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 

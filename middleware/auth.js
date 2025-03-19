@@ -12,17 +12,20 @@ exports.authMiddleware = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
   
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded; 
-  
-      const userExists = await User.findById(req.user.id);
-      if (!userExists) {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userExists = await User.findById(decoded.id);
+    if (!userExists) {
         return res.status(401).json({ msg: "Utilisateur non trouvé" });
-      }
+    }
+    req.user = userExists;
   
       next(); 
     } catch (error) {
-      res.status(401).json({ msg: "Token invalide" });
+        res.status(401).json({ 
+            msg: "Erreur d'authentification",
+            error: error.message, 
+            stack: process.env.NODE_ENV === "development" ? error.stack : undefined 
+        });
     }
   };
 
@@ -33,3 +36,16 @@ exports.adminMiddleware = (req, res, next) => {
   }
   next(); 
 };
+
+exports.checkPermission = (permissionName) => async (req, res, next) => {
+    try {
+      if (!(await req.user.hasPermission(permissionName))) {
+        return res.status(403).json({ msg: `Accès interdit, permission '${permissionName}' requise.` });
+      }
+      next();
+    } catch (error) {
+      console.error("Erreur dans checkPermission:", error);
+      res.status(500).json({ msg: "Erreur serveur", error: error.message });
+    }
+  };
+
