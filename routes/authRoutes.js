@@ -1,7 +1,7 @@
 const express = require("express");
 const { check } = require("express-validator");
 const { register, login } = require("../controllers/authcontroller");
-const { authMiddleware, adminMiddleware } = require("../middleware/auth");
+const { authMiddleware, adminMiddleware, checkPermission } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -25,6 +25,19 @@ router.get("/profile", authMiddleware, async (req, res) => {
 });
 router.get("/admin", authMiddleware, adminMiddleware, async (req, res) => {
     res.json({ msg: "Bienvenue Admin, accès autorisé" });
+});
+
+// Gestion de role 
+router.post("/create-product", authMiddleware, checkPermission("create_product"), (req, res) => {
+    res.json({ msg: "Produit créé avec succès !" });
+});
+  
+router.put("/edit-product", authMiddleware, checkPermission("edit_product"), (req, res) => {
+res.json({ msg: "Produit mis à jour !" });
+});
+  
+router.delete("/delete-product", authMiddleware, checkPermission("delete_product"), (req, res) => {
+    res.json({ msg: "Produit supprimé !" });
 });
 
 module.exports = router;
