@@ -1,0 +1,212 @@
+{
+	"info": {
+		"_postman_id": "1b9ea74b-fb67-4212-bde8-1b2df022280e",
+		"name": "Garage MEAN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:5000/api/users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"name\": \"Aro\", \r\n    \"email\": \"aro@example.com\", \r\n    \"age\": 25\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Lalaina\",\r\n  \"email\": \"lalaina@example.com\",\r\n  \"password\": \"1223334444\",\r\n  \"role\": \"manager\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"lalaina@example.com\",\r\n  \"password\": \"1223334444\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-role-permissions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZGQ3N2JlNDFkOWVmYWNkMjRlZWE3NSIsInJvbGUiOiJtYW5hZ2VyIiwiaWF0IjoxNzQyNTY3NDExLCJleHAiOjE3NDI1NzEwMTF9.dQ7HgFQWfyd-4iVfdKrHp4cbs2YZXFwQaYIELSf8FHw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"role\": \"manager\",\r\n  \"permissions\": [\"create_mecanicien\"]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/roles/update-role-permissions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"roles",
+						"update-role-permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "teste-permission",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDkzYTc5MzIwZDEwZDQxNGM3ZGRjZCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQyMzY4MDcwLCJleHAiOjE3NDIzNzE2NzB9.gG4bH6gECV4AruJe6HikNbAlKogyxAIQ5KGhpBL9zcw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/auth/create-product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"create-product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register-mecanicien",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZGQ3N2JlNDFkOWVmYWNkMjRlZWE3NSIsInJvbGUiOiJtYW5hZ2VyIiwiaWF0IjoxNzQyNTY3NDExLCJleHAiOjE3NDI1NzEwMTF9.dQ7HgFQWfyd-4iVfdKrHp4cbs2YZXFwQaYIELSf8FHw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Fitia\",\r\n  \"email\": \"fitia@example.com\",\r\n  \"password\": \"mecano1\",\r\n  \"role\": \"mecanicien\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/auth/register-mecanicien",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"register-mecanicien"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

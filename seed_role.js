@@ -9,23 +9,20 @@ mongoose.connect(process.env.MONGO_URI);
 const seedRoles = async () => {
   try {
     await RolePermission.deleteMany({});
+    await new RolePermission({
+      role: "user",
+      permissions: [] 
+    }).save();
 
-    // Récupérer les permissions existantes
-    const p1 = await Permission.findOne({ name: "create_product" });
-    const p2 = await Permission.findOne({ name: "edit_product" });
-    const p3 = await Permission.findOne({ name: "delete_product" });
+    await new RolePermission({
+      role: "manager",
+      permissions: [] 
+    }).save();
 
-    // Vérifier que les permissions existent avant d'insérer
-    if (!p1 || !p2 || !p3) {
-      console.error("❌ Les permissions ne sont pas encore créées ! Exécutez d'abord `seed.js`.");
-      process.exit(1);
-    }
-
-    // Insérer les permissions des rôles
-    await RolePermission.insertMany([
-      { role: "user", permissions: [p1._id] },
-      { role: "manager", permissions: [p1._id, p2._id, p3._id] }
-    ]);
+    await new RolePermission({
+      role: "mecanicien",
+      permissions: [] 
+    }).save();
 
     console.log("🚀 Rôles et permissions initialisés !");
     process.exit();
