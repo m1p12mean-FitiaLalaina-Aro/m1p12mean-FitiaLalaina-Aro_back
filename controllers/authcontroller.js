@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const User = require("../models/User");
 const UserConnected = require("../models/UserConnected");
+const RolePermission = require("../models/RolePermission");
 
 const failedLoginAttempts = {};
 
@@ -12,10 +13,14 @@ exports.register = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, specialite } = req.body;
 
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: "Utilisateur déjà existant" });
+
+    if (role === "mecanicien" && !req.user?.hasPermission("create_mecanicien")) {
+      return res.status(403).json({ msg: "Seuls les managers peuvent créer un mécanicien." });
+    }
 
     const rolePermissions = await RolePermission.findOne({ role }).populate("permissions");
     if (!rolePermissions) return res.status(400).json({ msg: "Rôle invalide" });
@@ -23,14 +28,16 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    user = new User({ name, email, password: hashedPassword, role });
+    user = new User({ name, email, password: hashedPassword, role ,specialite: role === "mecanicien" ? specialite : undefined });
 
     await user.save();
     res.status(201).json({ msg: "Utilisateur créé avec succès !" });
   } catch (error) {
-    res.status(500).json({ msg: "Erreur serveur" });
+    res.status(500).json({ msg: "Erreur serveur",error:error.message });
   }
 };
+
+
 
 // 🔹 CONNEXION (Login)
 exports.login = async (req, res) => {
@@ -71,4 +78,24 @@ exports.login = async (req, res) => {
     res.status(500).json({ msg: "Erreur serveur" });
   }
 };
+
+exports.updatePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findById(req.user.id);
+
+    if (!user) return res.status(404).json({ msg: "Utilisateur non trouvé" });
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) return res.status(400).json({ msg: "Ancien mot de passe incorrect." });
+
+    user.password = await bcrypt.hash(newPassword, 10); 
+    await user.save();
+
+    res.json({ msg: "Mot de passe mis à jour avec succès !" });
+  } catch (error) {
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
+  }
+};
+
 
