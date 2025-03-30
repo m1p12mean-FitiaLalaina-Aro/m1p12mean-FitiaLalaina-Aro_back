@@ -12,8 +12,6 @@ const seedDatabase = async () => {
     // Ajouter les permissions disponibles
     await Permission.insertMany([
       { name: "create_mecanicien" },
-      // { name: "edit_product" },
-      // { name: "delete_product" }
     ]);
 
     console.log("🚀 Permissions insérées avec succès !");
