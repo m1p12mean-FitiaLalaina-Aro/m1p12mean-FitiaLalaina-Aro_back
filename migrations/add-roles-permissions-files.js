@@ -20,7 +20,7 @@ const initializeRolesAndPermissions = async () => {
 
     // Ajouter des permissions au rôle manager
     await assignPermissions("user", ["create_cart"]);
-    await assignPermissions("manager", ["create_mecanicien"]);
+    await assignPermissions("manager", ["create_mecanicien","create_offre"]);
 
     console.log("🚀 Rôles et permissions configurés avec succès !");
     mongoose.disconnect();
