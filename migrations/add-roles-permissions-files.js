@@ -15,7 +15,7 @@ const initializeRolesAndPermissions = async () => {
     const roles = ["user", "manager", "mecanicien"];
     for (const role of roles) {
       await RolePermission.create({ role, permissions: [] });
-      console.log(`✅ Rôle '${role}' ajouté`);
+      console.log(`✅ Rôle '${role}' ajouté`);       
     }
 
     // Ajouter des permissions au rôle manager
