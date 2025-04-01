@@ -53,3 +53,69 @@ exports.attribuerMecaniciens = async (req, res) => {
     res.status(500).json({ msg: "Erreur serveur", error: error.message });
   }
 };
+
+exports.getTachesMecanicien = async (req, res) => {
+    try {
+      // 🔍 Trouver le mecanicien lié à l'utilisateur connecté
+      const mecanicien = await Mecanicien.findOne({ user: req.user._id });
+      if (!mecanicien) {
+        return res.status(404).json({ msg: "Fiche mécanicien introuvable" });
+      }
+  
+      // 🔎 Récupérer les tâches associées à ce mécanicien
+      const taches = await Affectation.find({ mecanicien: mecanicien._id })
+        .populate("cart")
+        .populate("offre")
+        .populate({
+            path: "mecanicien",
+            populate: { path: "user", select: "name email" }
+        })
+        .sort({ rendezVous: 1 });
+  
+      res.json(taches);
+    } catch (error) {
+      res.status(500).json({ msg: "Erreur serveur", error: error.message });
+    }
+};
+
+exports.updateStatut = async (req, res) => {
+    try {
+      const { affectationId } = req.params;
+      const { statut } = req.body;
+  
+      const affectation = await Affectation.findById(affectationId);
+      if (!affectation) return res.status(404).json({ msg: "Tâche non trouvée" });
+
+      const mecanicien = await Mecanicien.findOne({ user: req.user._id });
+      if (!mecanicien) {
+        return res.status(404).json({ msg: "Fiche mécanicien introuvable" });
+      }
+      
+      // Vérifier que c'est bien le mécanicien concerné
+      if (affectation.mecanicien.toString() !== mecanicien._id.toString()) {
+        return res.status(403).json({ msg: "Vous ne pouvez pas modifier cette tâche" });
+      }
+  
+      if (!["en cours", "terminée"].includes(statut)) {
+        return res.status(400).json({ msg: "Statut non valide" });
+      }
+  
+      affectation.statut = statut;
+  
+      // Si terminé, rendre le mécano dispo
+      if (statut === "terminée") {
+        const Mecanicien = require("../models/Mecanicien");
+        const mecanicien = await Mecanicien.findById(affectation.mecanicien);
+        mecanicien.disponible = true;
+        await mecanicien.save();
+      }
+  
+      await affectation.save();
+  
+      res.json({ msg: "Statut mis à jour", affectation });
+    } catch (error) {
+      res.status(500).json({ msg: "Erreur serveur", error: error.message });
+    }
+  };
+  
+  
