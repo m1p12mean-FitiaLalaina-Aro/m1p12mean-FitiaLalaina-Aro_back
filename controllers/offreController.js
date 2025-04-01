@@ -50,4 +50,28 @@ exports.getOffresParCartClient = async (req, res) => {
     }
 };
 
+exports.getOffresValidees = async (req, res) => {
+  try {
+    const managerId = req.user._id;
+
+    // 🔍 Trouver toutes les UserCart où l'offre choisie a été créée par CE manager
+    const carts = await UserCart.find({ offreChoisie: { $ne: null } })
+      .populate({
+        path: "offreChoisie",
+        match: { createdBy: managerId }, // 👈 filtre ici
+        populate: { path: "createdBy", select: "name email" }
+      })
+      .populate("user", "username email")
+      .lean();
+
+    // ❗ supprimer les carts où l'offreChoisie est null (non créées par ce manager)
+    const result = carts.filter(cart => cart.offreChoisie !== null);
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
+  }
+};
+
+
 

@@ -7,6 +7,7 @@ const roleRoutes = require("./routes/roleRoutes");
 const userCartRoutes = require("./routes/userCartRoutes");
 const offreRoutes = require("./routes/offreRoutes");
 const mecanicienRoutes = require("./routes/mecanicienRoutes");
+const affectationRoutes = require("./routes/affectationRoutes");
 
 dotenv.config();
 connectDB();
@@ -20,6 +21,7 @@ app.use("/api/roles", roleRoutes);
 app.use("/api/user-carts", userCartRoutes);
 app.use("/api/offres", offreRoutes);
 app.use("/api/mecanicien-fiche", mecanicienRoutes);
+app.use("/api/affectations", affectationRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`));

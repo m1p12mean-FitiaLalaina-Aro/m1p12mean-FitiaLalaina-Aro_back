@@ -64,7 +64,7 @@ exports.login = async (req, res) => {
     // Réinitialiser les tentatives après une connexion réussie
     delete failedLoginAttempts[email];
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "24h" });
 
     let existingSession = await UserConnected.findOne({ userId: user._id });
     if (existingSession) {
