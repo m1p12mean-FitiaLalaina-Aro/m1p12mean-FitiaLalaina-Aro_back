@@ -6,20 +6,24 @@ exports.choisirOffreClient = async (req, res) => {
   try {
     const { cartId, offreId } = req.body;
 
+    
     // Vérifier que la UserCart existe
     const cart = await UserCart.findById(cartId);
     if (!cart) return res.status(404).json({ msg: "Demande introuvable" });
-
+    
+    if (cart.offreChoisie) {
+      return res.status(400).json({ msg: "Une offre a déjà été choisie pour cette demande." });
+    }
     // Vérifier que la UserCart appartient bien au client connecté
     if (!cart.user.equals(req.user._id)) {
       return res.status(403).json({ msg: "Accès non autorisé à cette demande" });
     }
 
     const offre = await Offre.findOne({ _id: offreId, cart: cartId });
-    
     if (!offre) {
       return res.status(400).json({ msg: "Offre non valide pour cette demande" });
     }
+
 
     cart.offreChoisie = offreId;
     await cart.save();
