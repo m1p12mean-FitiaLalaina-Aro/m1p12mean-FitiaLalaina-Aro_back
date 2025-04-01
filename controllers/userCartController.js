@@ -10,7 +10,7 @@ exports.createUserCart = async (req, res) => {
       description,
       budget,
       dateHeureReparation,
-      user: req.user.id // supposons que req.user est injecté via authMiddleware
+      user: req.user.id 
     });
     await newCart.save();
     res.status(201).json(newCart);

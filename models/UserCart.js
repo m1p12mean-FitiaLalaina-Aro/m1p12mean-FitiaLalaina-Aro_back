@@ -7,7 +7,7 @@ const userCartSchema = new mongoose.Schema(
     description: { type: String, required: true },
     budget: { type: Number }, 
     dateHeureReparation: { type: Date }, 
-    user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" } 
+    user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" }
   },
   { timestamps: true }                                                                                                                      
 );
