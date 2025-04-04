@@ -20,7 +20,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/user-carts", userCartRoutes);
 app.use("/api/offres", offreRoutes);
-app.use("/api/mecanicien-fiche", mecanicienRoutes);
+app.use("/api/mecaniciens", mecanicienRoutes);
 app.use("/api/affectations", affectationRoutes);
 
 const PORT = process.env.PORT || 5000;

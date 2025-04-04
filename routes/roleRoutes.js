@@ -1,10 +1,11 @@
 const express = require("express");
-const { authMiddleware, adminMiddleware } = require("../middleware/auth");
-const { updateRolePermissions } = require("../controllers/roleController");
+const { updateRolePermissions, ajouterPermissions, ajouterRolePermission } = require("../controllers/roleController");
 
 const router = express.Router();
 
-router.put("/update-role-permissions", authMiddleware, adminMiddleware, updateRolePermissions);
+router.post("/permission", ajouterPermissions);
+router.post("/role-permissions", ajouterRolePermission);
+router.put("/update-role-permissions", updateRolePermissions);
 
 module.exports = router;
     

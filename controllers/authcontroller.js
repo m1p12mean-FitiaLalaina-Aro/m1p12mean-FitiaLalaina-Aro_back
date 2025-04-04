@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-    const { name, email, password, role, specialite } = req.body;
+    const { name, email, password, role } = req.body;
 
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: "Utilisateur déjà existant" });
@@ -28,7 +28,7 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    user = new User({ name, email, password: hashedPassword, role ,specialite: role === "mecanicien" ? specialite : undefined });
+    user = new User({ name, email, password: hashedPassword, role });
 
     await user.save();
     res.status(201).json({ msg: "Utilisateur créé avec succès !" });

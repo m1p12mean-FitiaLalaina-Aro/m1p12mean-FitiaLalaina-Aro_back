@@ -1,0 +1,133 @@
+--Creer les permission
+api: POST : /api/roles/permission
+body:
+{
+  "permissions": ["create_mecanicien", "create_offre", "create_cart","get_tache"]
+}
+
+--Creer Role Permission
+api: PUT : /api/roles/role-permissions
+body:
+{
+  "role": "manager",
+  "permissions": ["create_mecanicien","create_offre"]
+}
+{
+  "role": "mecanicien",
+  "permissions": ["get_tache"]
+}
+{
+  "role": "user",
+  "permissions": ["create_cart"]
+}
+
+--Creer utilisateur 
+api: POST :/api/auth/register
+body:
+{
+  "name": "Lalaina",
+  "email": "lalaina@example.com",
+  "password": "1223334444",
+  "role": "manager"
+}
+--Se connecter 
+api: POST : /api/auth/login
+body:
+{
+  "email": "lalaina@example.com",
+  "password": "1223334444"
+}
+
+--Creer un mecanicien 
+api: POST: /api/auth/register-mecanicien
+Auth: Manager token
+body:
+{
+  "name": "Fitia",
+  "email": "fitia@example.com",
+  "password": "mecano1",
+  "role": "mecanicien"
+}
+
+--Utilisateur creer cart
+api: POST: /api/user-carts
+Auth: User token
+body:
+{
+  "marque": "Toyota",
+  "probleme": "Frein qui grince",
+  "description": "Ça couine fort quand je freine à basse vitesse",
+  "budget": 150000,
+  "dateHeureReparation": "2025-04-01T10:30:00Z"
+}
+
+--creer un offre pour un cart 
+api: POST: /api/offres
+Auth: Manager token
+body:
+{
+  "titre": "Vidange complète",
+  "description": "Vidange moteur + filtre à huile",
+  "prix": 80000,
+  "cartId":"67ef7e359e4da7574e645122"
+}
+
+--Liste offre pour un cart
+api: GET: /api/offres/userCart/cartId
+Auth: User(utilisateur connecter qui a creer )
+
+--choisir un offre
+api: PUT: /api/user-carts/choisir-offre
+Auth: User token
+body:
+{
+  "cartId":"67ef7e359e4da7574e645122",
+  "offreId":"67ef7ede9e4da7574e645129"
+}
+
+--Creer le fiche d'un mecanicien 
+api: POST: /api/mecanicien
+Auth: Manager token
+body:
+{
+  "userId":"67ef7da39e4da7574e645114",
+  "specialites": ["freinage"],
+  "garage":"Garage voahirana"
+}
+--Ajouter des specialiter a un mecanicien
+api: PUT: /api/mecaniciens/ajouter-specialites
+Auth: ManagerToken
+body:
+{
+  "mecanicienId": "67ef84e042a91d5044f46544",
+  "specialites": ["freinage"]
+}
+--Trouver mecanicien par specialiter
+api: GET: /api/mecaniciens/specialite/nomspecialite
+
+--Avoir tous les offres eja valider
+api: GET: /api/offres/offreValider
+remareque on recupere le cart qui est lieer a l'offre valider
+
+--Affectation tache a un mecanicien pour un offre
+api: POST: /api/affectations/attribuer
+Auth: Manager token
+body:
+{
+  "cartId": "67ef7e359e4da7574e645122",
+  "offreId": "67ef7ede9e4da7574e645129",
+  "mecanicienIds": ["67ef84e042a91d5044f46544"] 
+}
+NB: id mecanicien de table mecanicien et non id du user ayant role mecanicien
+
+--Voir tous les tache qui lui sont attribuer 
+api: GET: /api/affectations/tacheMecanicien
+Auth: mecanicien token
+
+--Finir une tache
+api: PUT: /api/affectations/update-status/affectationId
+Auth: Mecanicien Token
+body:
+{
+  "statut":"terminée"
+}
