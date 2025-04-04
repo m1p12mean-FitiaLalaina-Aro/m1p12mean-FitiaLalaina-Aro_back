@@ -7,6 +7,8 @@ exports.creerFicheMecanicien = async (req, res) => {
     const { userId, specialite, garage } = req.body;
 
     const user = await User.findById(userId);
+    console.log(user);
+    
     if (!user || user.role !== "mecanicien") {
       return res.status(400).json({ msg: "L'utilisateur n'est pas un mécanicien valide." });
     }
@@ -42,7 +44,7 @@ exports.getAllFichesMecaniciens = async (req, res) => {
 
 exports.getBySpecialite = async (req, res) => {
     const { nom } = req.params;
-    const mecaniciens = await Mecanicien.find({ specialites: nom }).populate("user", "username email");
+    const mecaniciens = await Mecanicien.find({ specialites: nom }).populate("user", "name email");
     res.json(mecaniciens);
 };
 

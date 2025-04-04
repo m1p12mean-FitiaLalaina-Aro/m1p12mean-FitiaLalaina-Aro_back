@@ -21,7 +21,7 @@ exports.createOffre = async (req, res) => {
 
 exports.getAllOffres = async (req, res) => {
   try {
-    const offres = await Offre.find().populate("createdBy", "username email");
+    const offres = await Offre.find().populate("createdBy", "name email");
     res.json(offres);
   } catch (error) {
     res.status(500).json({ msg: "Erreur serveur", error: error.message });

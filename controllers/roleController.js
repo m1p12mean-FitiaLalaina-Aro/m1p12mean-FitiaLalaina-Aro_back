@@ -51,4 +51,34 @@ exports.ajouterPermissions = async (req, res) => {
 };
 
 
+exports.ajouterRolePermission = async (req, res) => {
+  try {
+    const { role, permissions } = req.body;
+
+    if (!role || !Array.isArray(permissions)) {
+      return res.status(400).json({ msg: "Rôle et liste de permissions requis." });
+    }
+
+    // Vérifier que les permissions existent
+    const validPermissions = await Permission.find({ name: { $in: permissions } });
+
+    if (validPermissions.length !== permissions.length) {
+      return res.status(400).json({ msg: "Une ou plusieurs permissions sont invalides." });
+    }
+
+    // Créer ou mettre à jour
+    const rolePerm = await RolePermission.findOneAndUpdate(
+      { role },
+      { permissions: validPermissions.map(p => p._id) },
+      { new: true, upsert: true }
+    );
+
+    res.status(201).json({ msg: "Rôle/permissions enregistrés", rolePermission: rolePerm });
+  } catch (error) {
+    res.status(500).json({ msg: "Erreur serveur", error: error.message });
+  }
+};
+
+
+
 
